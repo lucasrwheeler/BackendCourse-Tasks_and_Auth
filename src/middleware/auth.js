@@ -1,4 +1,5 @@
 import jwt from 'jsonwebtoken';
+import { findById } from '../repositories/taskRepo.js';
 
 export function authenticate(req, res, next) {
   const authHeader = req.headers.authorization;
@@ -41,7 +42,6 @@ export function requireAdmin(req, res, next) {
 export async function requireTaskOwnership(req, res, next) {
   const taskId = parseInt(req.params.id);
 
-  const { findById } = await import('../repositories/taskRepo.js');
   const task = await findById(taskId);
 
   if (!task) {
