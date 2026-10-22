@@ -45,15 +45,11 @@ export async function requireTaskOwnership(req, res, next) {
   const task = await findById(taskId);
 
   if (!task) {
-    const err = new Error('Task not found');
-    err.status = 404;
-    return next(err);
+    return res.status(404).json({ errors: 'Task not found' });
   }
 
-  if (task.userId !== req.user.id) {
-    const err = new Error('Forbidden: You do not own this task');
-    err.status = 403;
-    return next(err);
+  if (task.userId != req.user.id) {
+    return res.status(403).json({ errors: 'Forbidden: You do not own this task' });
   }
 
   req.task = task;
